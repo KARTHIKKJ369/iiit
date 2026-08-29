@@ -82,13 +82,13 @@ This project provides an end-to-end, software-first and hardware-ready collision
 
 | Module | Location | Description |
 |---|---|---|
-| **Backend API** | `backend/api/` | FastAPI service handling ingestion, database access, scenario orchestration, and metrics. |
-| **Risk Engine** | `backend/risk_engine/` | Kinematic spatial analysis, closing speed, heading disparity, TTC calculation, and weather scaling. |
-| **Avoidance Engine** | `backend/avoidance/` | Decision logic generating proactive and emergency collision avoidance maneuvers. |
-| **Edge ML** | `ml/` | Synthetic dataset generation, 11-feature LSTM model training, and quantized TFLite inference engine. |
-| **Web Dashboard** | `dashboard/` | High-performance React 19 + Leaflet GIS frontend with live scenario controls and analytics. |
-| **Simulator** | `simulator/` | Multi-vessel simulation environment generating realistic physics, IMU channels, and waterway hazards. |
-| **Firmware** | `firmware/` | ESP32 sensor acquisition sketches and Raspberry Pi LoRa-to-MQTT bridge specifications. |
+| **Backend API** | `backwater-boat/backend/api/` | FastAPI service handling ingestion, database access, scenario orchestration, and metrics. |
+| **Risk Engine** | `backwater-boat/backend/risk_engine/` | Kinematic spatial analysis, closing speed, heading disparity, TTC calculation, and weather scaling. |
+| **Avoidance Engine** | `backwater-boat/backend/avoidance/` | Decision logic generating proactive and emergency collision avoidance maneuvers. |
+| **Edge ML** | `backwater-boat/ml/` | Synthetic dataset generation, 11-feature LSTM model training, and quantized TFLite inference engine. |
+| **Web Dashboard** | `backwater-boat/dashboard/` | High-performance React 19 + Leaflet GIS frontend with live scenario controls and analytics. |
+| **Simulator** | `backwater-boat/simulator/` | Multi-vessel simulation environment generating realistic physics, IMU channels, and waterway hazards. |
+| **Firmware** | `backwater-boat/firmware/` | ESP32 sensor acquisition sketches and Raspberry Pi LoRa-to-MQTT bridge specifications. |
 
 ---
 
@@ -97,6 +97,7 @@ This project provides an end-to-end, software-first and hardware-ready collision
 The entire stack can be launched with Docker Compose:
 
 ```bash
+cd backwater-boat
 docker compose up --build
 ```
 
@@ -122,7 +123,7 @@ docker compose up --build
 ### 1. Backend Service
 
 ```bash
-cd backend
+cd backwater-boat/backend
 pip install -r requirements.txt
 PYTHONPATH=.. uvicorn backend.api.main:app --reload --port 8000
 ```
@@ -130,7 +131,7 @@ PYTHONPATH=.. uvicorn backend.api.main:app --reload --port 8000
 ### 2. Web Dashboard
 
 ```bash
-cd dashboard
+cd backwater-boat/dashboard
 npm install
 npm run dev
 ```
@@ -141,7 +142,7 @@ Dashboard dev server will start at `http://localhost:5173`.
 Run a specific collision scenario against the local backend and MQTT broker:
 
 ```bash
-cd simulator
+cd backwater-boat/simulator
 pip install -r requirements.txt
 MQTT_HOST=localhost python boat_sim.py --scenario HEAD_ON
 ```
@@ -149,6 +150,7 @@ MQTT_HOST=localhost python boat_sim.py --scenario HEAD_ON
 ### 4. Unit Tests
 
 ```bash
+cd backwater-boat
 PYTHONPATH=. python -m unittest discover backend/tests
 ```
 
@@ -270,6 +272,7 @@ $$\mathbf{x}_t = \big[ \text{lat}_n,\, \text{lon}_n,\, \frac{\text{speed}}{10},\
 To train a new LSTM model and export standard Keras (`.h5`) and quantized TensorFlow Lite (`.tflite`) weights:
 
 ```bash
+cd backwater-boat
 pip install -r ml/requirements.txt
 python ml/training/train_lstm.py
 ```
@@ -300,6 +303,7 @@ The framework includes a standalone offline evaluation suite that calculates col
 ### Run Standalone Evaluation
 
 ```bash
+cd backwater-boat
 python evaluate_standalone.py
 ```
 
